@@ -1,19 +1,44 @@
-*.py[cod]
-assets/external/
-.states
-# Virtual environment
-venv/
-
-# Reflex
+# --- Reflex ---
 .web/
+.states/
+# Si algun cop fas servir imatges o fitxers temporals generats:
+assets/external/
+
+# --- Base de dades (MOLT IMPORTANT) ---
+# Volem ignorar les dades reals, però NO els scripts de migració
 *.db
-alembic/
+*.db-journal
+*.sqlite3
+# Si vols guardar l'historial de canvis de la DB però no la config local:
+# alembic.ini  <-- Descomenta si el teu alembic.ini té contrasenyes
 
-# Python
+# --- Python & Entorns ---
+# Com que fas servir 'uv', el directori per defecte és .venv
+.venv/
+venv/
+ENV/
+env/
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
-.env
+*.pyd
+.python-version
 
-# VS Code
+# --- Seguretat ---
+.env
+*.pem
+
+# --- Editors i SO ---
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# Fitxers de sistema (macOS i Windows)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Node/Frontend (opcional) ---
+# Reflex genera això dins de .web, però si algun cop fas npm install a l'arrel:
+node_modules/

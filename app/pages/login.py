@@ -65,7 +65,7 @@ def login_page() -> rx.Component:
             ),
             rx.hstack(
                 rx.divider(width="100%"),
-                rx.text("demo: any username", font_size="11px", color=styles.TEXT_SECONDARY, white_space="nowrap"),
+                rx.text("feina de formiga, força d'elefant", font_size="11px", color=styles.TEXT_SECONDARY, white_space="nowrap"),
                 rx.divider(width="100%"),
                 width="100%",
                 align_items="center",

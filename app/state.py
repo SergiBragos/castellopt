@@ -1,49 +1,64 @@
-#state.py
+# state.py
 import reflex as rx
 import sqlmodel
 import hashlib
+from typing import Optional # Importem per al tipus de la colla
 
+# ── BDDs ──────────────────────────────────────────────────────────────────────
 
-# ── BDDs ────────────────────────────────────────────────────────────
-
-#Usuaris
 class User(rx.Model, table=True):
     username: str = sqlmodel.Field(unique=True, index=True)
     password: str
-    colla: str
+    colla: int
     email: str
 
+class Casteller(rx.Model, table=True):
+    name: str
+    nickname: str
+    colla: int
+    height: int
+    weight: int
+    talla: str
+    comentaris: str
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
-
 # ── App State ─────────────────────────────────────────────────────────────────
 
 class AppState(rx.State):
     username: str = ""
     is_logged_in: bool = False
+    colla: int | None = None  # Usem el pipe | per permetre el None inicial
+    email: str = ""
 
     login_username: str = ""
     login_password: str = ""
     login_error: str = ""
 
     casteller_name: str = ""
-    casteller_height: str = ""
-    casteller_weight: str = ""
-    casteller_shirt: str = "M"
-    casteller_position: str = "Pinya (base)"
-    casteller_experience: str = ""
+    casteller_nickname: str = ""
+    casteller_height: str = "" 
+    casteller_weight: str = "" 
+    casteller_id_edicio: int | None = None
+    casteller_shirt: str = ""
     casteller_notes: str = ""
     entry_success: str = ""
+
+    # Setters manuals (Necessaris per evitar DeprecationWarnings)
+    def set_name(self, value: str): self.casteller_name = value
+    def set_nickname(self, value: str): self.casteller_nickname = value
+    def set_height(self, value: str): self.casteller_height = value
+    def set_weight(self, value: str): self.casteller_weight = value
+    def set_shirt(self, value: str): self.casteller_shirt = value # Afegit
+    def set_notes(self, value: str): self.casteller_notes = value # Afegit
 
     prioritize_safety: bool = True
     allow_swaps: bool = True
     use_experience: bool = False
     display_name: str = ""
-    email: str = ""
     settings_saved: str = ""
 
     results_tab: str = "visual"
@@ -65,6 +80,7 @@ class AppState(rx.State):
             self.login_error = "L'usuari no existeix."
             return
 
+        # TODO: Implementar hash_password aquí quan tinguis usuaris reals
         if user.password != password:
             self.login_error = "Contrasenya incorrecta."
             return
@@ -74,7 +90,7 @@ class AppState(rx.State):
         self.is_logged_in = True
         self.login_error = ""
         self.email = user.email
-        self.colla = user.colla
+        self.colla = int(user.colla)
         return rx.redirect("/dashboard")
 
     def do_logout(self):
@@ -91,23 +107,71 @@ class AppState(rx.State):
         if not self.casteller_name.strip():
             self.entry_success = "error: El nom és obligatori."
             return
-        self.entry_success = f"èxit: {self.casteller_name} desat correctament!"
-        self.casteller_name = ""
-        self.casteller_height = ""
-        self.casteller_weight = ""
-        self.casteller_shirt = "M"
-        self.casteller_position = "Pinya (base)"
-        self.casteller_experience = ""
-        self.casteller_notes = ""
+        
+        try:
+            # Validació de números abans d'entrar a la sessió
+            # El .strip() i l'OR '0' evita errors si l'input està buit
+            h = int(self.casteller_height.strip() or "0")
+            w = int(self.casteller_weight.strip() or "0")
+
+            with rx.session() as session:
+                if self.casteller_id_edicio:
+                    casteller = session.get(Casteller, self.casteller_id_edicio)
+                    if casteller:
+                        casteller.name = str(self.casteller_name)
+                        casteller.nickname = str(self.casteller_nickname)
+                        casteller.colla = int(self.colla)
+                        casteller.height = h
+                        casteller.weight = w
+                        casteller.talla = str(self.casteller_shirt)
+                        casteller.comentaris = str(self.casteller_notes)
+                else:
+                    nou_casteller = Casteller(
+                        name=str(self.casteller_name),
+                        nickname=str(self.casteller_nickname),
+                        colla=int(self.colla),
+                        height=h,
+                        weight=w,
+                        talla=str(self.casteller_shirt),
+                        comentaris=str(self.casteller_notes),
+                    )
+                    session.add(nou_casteller)
+                
+                session.commit()
+                self.casteller_id_edicio = None 
+            
+            self.clear_form() # Usem la funció per netejar el formulari
+            self.entry_success = f"Reeixida! Casteller desat correctament!"
+
+        except ValueError:
+            self.entry_success = "error: L'alçada i el pes han de ser números."
+        except Exception as e:
+            self.entry_success = f"error: {str(e)}"
+
+    def goto_edit_casteller(self, casteller: Casteller):
+        """Prepara l'estat per editar i redirigeix al formulari."""
+        self.casteller_id_edicio = int(casteller.id)
+        self.casteller_name = casteller.name
+        self.casteller_nickname = casteller.nickname
+        
+        # CORRECCIÓ CRÍTICA: Convertim a str() perquè l'estat espera STR, no INT.
+        self.casteller_height = str(casteller.height)
+        self.casteller_weight = str(casteller.weight)
+        
+        self.casteller_shirt = casteller.talla
+        self.casteller_notes = casteller.comentaris
+        self.entry_success = "" # Netegem missatges previs
+        
+        return rx.redirect("/manual")
 
     def clear_form(self):
         self.casteller_name = ""
+        self.casteller_nickname = ""
         self.casteller_height = ""
         self.casteller_weight = ""
-        self.casteller_shirt = "M"
-        self.casteller_position = "Pinya (base)"
-        self.casteller_experience = ""
+        self.casteller_shirt = ""
         self.casteller_notes = ""
+        self.casteller_id_edicio = None
         self.entry_success = ""
 
     def save_settings(self):
@@ -140,3 +204,20 @@ class AppState(rx.State):
         if ":" in self.entry_success:
             return self.entry_success.split(":", 1)[1]
         return self.entry_success
+    
+    @rx.var
+    def num_castellers(self) -> int:
+        with rx.session() as session:
+            # Busquem tots els castellers que tenen la mateixa colla que l'usuari
+            result = session.exec(
+                sqlmodel.select(Casteller).where(Casteller.colla == self.colla)
+            ).all()
+            return len(result)
+
+    @rx.var
+    def castellers_colla(self) -> list[Casteller]:
+        with rx.session() as session:
+            # Recuperem tots els castellers de la colla actual
+            return session.exec(
+                sqlmodel.select(Casteller).where(Casteller.colla == self.colla)
+            ).all()

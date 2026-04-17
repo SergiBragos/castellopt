@@ -25,9 +25,9 @@ def manual_entry_page() -> rx.Component:
                         spacing="1", align_items="flex_start", width="100%",
                     ),
                     rx.vstack(
-                        rx.text("Alçada d'espatlles (cm)", style=styles.label_style),
-                        rx.input(placeholder="140", type="number", value=AppState.casteller_height,
-                                 on_change=AppState.set_casteller_height, font_size="13px", width="100%"),
+                        rx.text("Sobrenom", style=styles.label_style),
+                        rx.input(placeholder="Messi", value=AppState.casteller_nickname,
+                                 on_change=AppState.set_casteller_nickname, font_size="13px", width="100%"),
                         spacing="1", align_items="flex_start", width="100%",
                     ),
                     columns="2", spacing="3", width="100%", margin_bottom="12px",
@@ -37,6 +37,12 @@ def manual_entry_page() -> rx.Component:
                         rx.text("Pes (kg)", style=styles.label_style),
                         rx.input(placeholder="70", type="number", value=AppState.casteller_weight,
                                  on_change=AppState.set_casteller_weight, font_size="13px", width="100%"),
+                        spacing="1", align_items="flex_start", width="100%",
+                    ),
+                    rx.vstack(
+                        rx.text("Alçada d'espatlles (cm)", style=styles.label_style),
+                        rx.input(placeholder="140", type="number", value=AppState.casteller_height,
+                                 on_change=AppState.set_casteller_height, font_size="13px", width="100%"),
                         spacing="1", align_items="flex_start", width="100%",
                     ),
                     rx.vstack(

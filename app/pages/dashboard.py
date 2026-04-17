@@ -1,3 +1,4 @@
+#dashboard.py
 import reflex as rx
 from app.state import AppState
 from app import styles
@@ -16,24 +17,24 @@ def dashboard_page() -> rx.Component:
     return app_layout(
         rx.box(
             rx.text("Dashboard", style=styles.page_title_style),
-            rx.text("Overview of your castell and team", style=styles.page_sub_style),
+            rx.text("Dades de la teva colla", style=styles.page_sub_style),
             rx.hstack(
-                stat_card("Castellers", "24"),
-                stat_card("Positions filled", "18"),
-                stat_card("Castell type", "4 de 8"),
+                stat_card("Castellers introduïts a la BDD", AppState.num_castellers.to(str)), #<-- query dels castellers afegits a la colla actual
+                stat_card("Posicions", "#calc#"), #<-- Ho calcularem a partir del castell actual
+                stat_card("Castell", "4d8"),
                 spacing="3",
                 width="100%",
                 margin_bottom="16px",
             ),
             rx.box(
-                rx.text("Recent activity", style=styles.card_title_style),
+                rx.text("Activitat recent", style=styles.card_title_style),
                 rx.table.root(
                     rx.table.header(
                         rx.table.row(
-                            rx.table.column_header_cell(rx.text("Action", font_size="12px", color=styles.TEXT_SECONDARY)),
-                            rx.table.column_header_cell(rx.text("User", font_size="12px", color=styles.TEXT_SECONDARY)),
-                            rx.table.column_header_cell(rx.text("Date", font_size="12px", color=styles.TEXT_SECONDARY)),
-                            rx.table.column_header_cell(rx.text("Status", font_size="12px", color=styles.TEXT_SECONDARY)),
+                            rx.table.column_header_cell(rx.text("Activitat", font_size="12px", color=styles.TEXT_SECONDARY)),
+                            rx.table.column_header_cell(rx.text("Usuari", font_size="12px", color=styles.TEXT_SECONDARY)),
+                            rx.table.column_header_cell(rx.text("Data", font_size="12px", color=styles.TEXT_SECONDARY)),
+                            rx.table.column_header_cell(rx.text("Estat", font_size="12px", color=styles.TEXT_SECONDARY)),
                         )
                     ),
                     rx.table.body(
@@ -61,8 +62,8 @@ def dashboard_page() -> rx.Component:
                 style=styles.card_style,
             ),
             rx.hstack(
-                rx.link(rx.button("Go to Upload CSV", style=styles.btn_primary), href="/upload"),
-                rx.link(rx.button("View latest results", style=styles.btn_secondary), href="/results"),
+                rx.link(rx.button("Carrega un CSV", style=styles.btn_primary), href="/upload"),
+                rx.link(rx.button("Visualitza els darrers resultats", style=styles.btn_secondary), href="/results"),
                 spacing="2",
             ),
             width="100%",

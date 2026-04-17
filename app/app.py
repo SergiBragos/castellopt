@@ -16,7 +16,7 @@ app = rx.App(
 
 app.add_page(login_page, route="/", title="CastellOpt — Login")
 app.add_page(dashboard_page, route="/dashboard", title="CastellOpt — Dashboard")
-app.add_page(upload_page, route="/upload", title="CastellOpt — Upload CSV")
-app.add_page(manual_entry_page, route="/manual", title="CastellOpt — Manual Entry")
-app.add_page(results_page, route="/results", title="CastellOpt — Results")
-app.add_page(settings_page, route="/settings", title="CastellOpt — Settings")
+app.add_page(upload_page, route="/upload", title="CastellOpt — Càrrega CSV")
+app.add_page(manual_entry_page, route="/manual", title="CastellOpt — Entrada Manual")
+app.add_page(results_page, route="/results", title="CastellOpt — Resultats")
+app.add_page(settings_page, route="/settings", title="CastellOpt — Preferències")
