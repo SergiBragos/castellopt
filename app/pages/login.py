@@ -7,7 +7,12 @@ def login_page() -> rx.Component:
     return rx.center(
         rx.box(
             rx.vstack(
-                rx.text("🏰", font_size="36px", text_align="center"),
+                rx.image(
+                    src="/imatge_castellers.png", 
+                    width="80px", 
+                    height="auto",
+                    border_radius="15px",
+                ),
                 rx.text("CastellOpt", font_size="22px", font_weight="500", color=styles.TEXT_PRIMARY),
                 rx.text("Optimitzador de castells", font_size="13px", color=styles.TEXT_SECONDARY),
                 spacing="1",

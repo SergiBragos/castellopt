@@ -39,7 +39,12 @@ def sidebar(active_route: str) -> rx.Component:
     return rx.box(
         rx.box(
             rx.hstack(
-                rx.text("🏰", font_size="18px"),
+                rx.image(
+                    src="/imatge_castellers.png", 
+                    width="50px", 
+                    height="auto",
+                    border_radius="15px",
+                ),
                 rx.vstack(
                     rx.text("CastellOpt", font_size="15px", font_weight="500", color=styles.TEXT_PRIMARY),
                     rx.text("Optimitzador de castells", font_size="11px", color=styles.TEXT_SECONDARY),
@@ -53,10 +58,10 @@ def sidebar(active_route: str) -> rx.Component:
             border_bottom=f"0.5px solid {styles.BORDER}",
             margin_bottom="8px",
         ),
-        nav_item("Dashboard", "📊", "/dashboard", active_route),
+        nav_item("Dashboard", "📈", "/dashboard", active_route),
         nav_item("Carregar CSV", "⬆️", "/upload", active_route),
         nav_item("Entrada manual", "✏️", "/manual", active_route),
-        nav_item("Resultats", "📈", "/results", active_route),
+        nav_item("Resultats", "📊", "/results", active_route),
         nav_item("Preferències", "⚙️", "/settings", active_route),
         rx.spacer(),
         sidebar_footer(),

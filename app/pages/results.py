@@ -14,7 +14,7 @@ FORMATION = [
 #------------FUNCIONS------------
 
 def chip(name: str, bg: str, fg: str) -> rx.Component:
-    """Component visual per als membres del tronc."""
+    #Component visual per als membres del tronc.
     return rx.box(
         rx.text(name, font_size="10px", font_weight="500"),
         background_color=bg, 
@@ -25,7 +25,7 @@ def chip(name: str, bg: str, fg: str) -> rx.Component:
     )
 
 def dades_header():
-    """Mostra les dades tècniques del castell seleccionat."""
+    #Mostra les dades tècniques del castell seleccionat.
     return rx.cond(
         AppState.dades_castell_actiu,
         rx.grid(
