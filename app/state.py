@@ -21,6 +21,45 @@ class Casteller(rx.Model, table=True):
     talla: str
     comentaris: str
 
+# state.py
+
+class Castell(rx.Model, table=True):
+    nom: str = sqlmodel.Field(unique=True)
+    posicions: int | None = None
+    max_rengles: int | None = None
+    max_reserves: int | None = None
+    pisos: int | None = None
+    num_castellers: int | None = None
+    equacions: int | None = None
+    tipus_tronc: str = ""
+    max_iters: int | None = None
+    min_iters: int | None = None
+    rengles_pes: int | None = None
+    x_folre: int | None = None
+    x_manilles: int | None = None
+    x_pinya: int | None = None
+    x_tronc: int | None = None
+    y_folre: int | None = None
+    y_manilles: int | None = None
+    y_pinya: int | None = None
+    y_tronc: int | None = None
+    dist_cordo: int | None = None
+    angle_inioffset: int | None = None
+    long_tit: float | None = None
+    rang_mapa_r1: int | None = None
+    offset_mapa_r1: int | None = None
+    offset_titol_r1: int | None = None
+    rang_mapa_r2: int | None = None
+    offset_mapa_r2: int | None = None
+    offset_titol_r2: int | None = None
+    rang_mapa_r3: int | None = None
+    offset_mapa_r3: int | None = None
+    offset_titol_r3: int | None = None
+    grafic_vmax: int | None = None
+    grafic_nivvert: int | None = None
+    grafic_nivhor: int | None = None
+    cordo_cm: float | None = None
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def hash_password(password: str) -> str:
@@ -60,6 +99,9 @@ class AppState(rx.State):
     use_experience: bool = False
     display_name: str = ""
     settings_saved: str = ""
+    selected_castell: str = ""  # El nom del castell triat al menú
+    dades_castell_actiu: Optional[Castell] = None
+    iteracions_triades: str = ""
 
     results_tab: str = "visual"
 
@@ -186,6 +228,15 @@ class AppState(rx.State):
     def toggle_experience(self):
         self.use_experience = not self.use_experience
 
+    def set_selected_castell(self, val: str):
+        #La funció que canvia el valor de la variable selected_castell segons el que cliquis a la pestanya de results.
+        self.selected_castell = val
+        with rx.session() as session:
+            # Busquem el castell a la DB per omplir les dades automàticament
+            self.dades_castell_actiu = session.exec(
+                sqlmodel.select(Castell).where(Castell.nom == val)
+            ).first()
+
     @rx.var
     def user_initials(self) -> str:
         if not self.username:
@@ -221,3 +272,25 @@ class AppState(rx.State):
             return session.exec(
                 sqlmodel.select(Casteller).where(Casteller.colla == self.colla)
             ).all()
+        
+    @rx.var
+    def llista_noms_castells(self) -> list[str]:
+        "Obtén la llista de noms per al menú desplegable."
+        with rx.session() as session:
+            result = session.exec(sqlmodel.select(Castell.nom)).all()
+            #print(f"DEBUG --> result: {result}")
+            return result if result else []
+        
+    @rx.var
+    def llista_pisos_rang(self) -> list[int]:
+        # Si el castell té 7 pisos, volem [7, 6, 5, 4, 3, 2, 1] per pintar la taula de dalt a baix
+        if self.dades_castell_actiu and self.dades_castell_actiu.pisos:
+            return list(range(self.dades_castell_actiu.pisos, 0, -1))
+        return []
+
+    @rx.var
+    def llista_rengles_rang(self) -> list[int]:
+        # Si té 3 rengles, volem [1, 2, 3]
+        if self.dades_castell_actiu and self.dades_castell_actiu.max_rengles:
+            return list(range(1, self.dades_castell_actiu.max_rengles + 1))
+        return []

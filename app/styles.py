@@ -28,7 +28,7 @@ base_style: dict = {
 sidebar_style: dict = {
     "width": "200px",
     "min_width": "200px",
-    "background_color": BG_PRIMARY,
+    "background_color": BG_SECONDARY,
     "border_right": f"0.5px solid {BORDER}",
     "height": "100vh",
     "display": "flex",
