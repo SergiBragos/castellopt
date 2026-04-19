@@ -1,4 +1,4 @@
-# state.py
+#app/state.py
 import reflex as rx
 import sqlmodel
 import hashlib
@@ -20,8 +20,6 @@ class Casteller(rx.Model, table=True):
     weight: int
     talla: str
     comentaris: str
-
-# state.py
 
 class Castell(rx.Model, table=True):
     nom: str = sqlmodel.Field(unique=True)
@@ -68,6 +66,7 @@ def hash_password(password: str) -> str:
 # ── App State ─────────────────────────────────────────────────────────────────
 
 class AppState(rx.State):
+    state_auto_setters: bool = True
     username: str = ""
     is_logged_in: bool = False
     colla: int | None = None  # Usem el pipe | per permetre el None inicial
@@ -102,6 +101,7 @@ class AppState(rx.State):
     selected_castell: str = ""  # El nom del castell triat al menú
     dades_castell_actiu: Optional[Castell] = None
     iteracions_triades: str = ""
+    def set_iteracions_triades(self, value: str): self.iteracions_triades = value
 
     results_tab: str = "visual"
 

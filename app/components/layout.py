@@ -1,3 +1,4 @@
+#app/components/layout.py
 import reflex as rx
 from app.state import AppState
 from app import styles
@@ -18,6 +19,21 @@ def nav_item(label: str, icon: str, route: str, active_route: str) -> rx.Compone
         text_decoration="none",
     )
 
+def sidebar_footer() -> rx.Component:
+    #Component per a la part inferior de la sidebar amb el switch de mode.
+    return rx.vstack(
+        rx.divider(border_color=styles.BORDER),
+        rx.hstack(
+            rx.text("Mode fosc", font_size="13px", color=styles.TEXT_SECONDARY),
+            rx.spacer(),
+            rx.color_mode.switch(), # El switch de Reflex que gestiona tot sol el canvi
+            width="100%",
+            padding="16px",
+            align_items="center",
+        ),
+        width="100%",
+    )
+
 
 def sidebar(active_route: str) -> rx.Component:
     return rx.box(
@@ -26,7 +42,7 @@ def sidebar(active_route: str) -> rx.Component:
                 rx.text("🏰", font_size="18px"),
                 rx.vstack(
                     rx.text("CastellOpt", font_size="15px", font_weight="500", color=styles.TEXT_PRIMARY),
-                    rx.text("Tower optimizer", font_size="11px", color=styles.TEXT_SECONDARY),
+                    rx.text("Optimitzador de castells", font_size="11px", color=styles.TEXT_SECONDARY),
                     spacing="0",
                     align_items="flex_start",
                 ),
@@ -38,11 +54,12 @@ def sidebar(active_route: str) -> rx.Component:
             margin_bottom="8px",
         ),
         nav_item("Dashboard", "📊", "/dashboard", active_route),
-        nav_item("Upload CSV", "⬆️", "/upload", active_route),
-        nav_item("Manual entry", "✏️", "/manual", active_route),
-        nav_item("Results", "📈", "/results", active_route),
-        nav_item("Settings", "⚙️", "/settings", active_route),
+        nav_item("Carregar CSV", "⬆️", "/upload", active_route),
+        nav_item("Entrada manual", "✏️", "/manual", active_route),
+        nav_item("Resultats", "📈", "/results", active_route),
+        nav_item("Preferències", "⚙️", "/settings", active_route),
         rx.spacer(),
+        sidebar_footer(),
         rx.box(
             rx.hstack(
                 rx.box(
@@ -91,7 +108,9 @@ def app_layout(content: rx.Component, active_route: str) -> rx.Component:
                 padding="24px",
                 overflow_y="auto",
                 height="100vh",
+                background_color=styles.BG_TERTIARY,
             ),
+            background_color=styles.BG_TERTIARY,
             spacing="0",
             align_items="flex_start",
             height="100vh",

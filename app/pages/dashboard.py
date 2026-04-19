@@ -19,9 +19,9 @@ def dashboard_page() -> rx.Component:
             rx.text("Dashboard", style=styles.page_title_style),
             rx.text("Dades de la teva colla", style=styles.page_sub_style),
             rx.hstack(
-                stat_card("Castellers introduïts a la BDD", AppState.num_castellers.to(str)), #<-- query dels castellers afegits a la colla actual
-                stat_card("Posicions", "#calc#"), #<-- Ho calcularem a partir del castell actual
-                stat_card("Castell", "4d8"),
+                stat_card("Castellers introduïts a la BDD", AppState.num_castellers.to(str)), #<-- query dels castellers afegits a la colla actualment
+                stat_card("Posicions", "canviar per AppState.dades_castell_actiu[posicions]"), #<-- Ho calcularem a partir del castell actual
+                stat_card("Castell seleccionat", AppState.selected_castell.to(str)),
                 spacing="3",
                 width="100%",
                 margin_bottom="16px",

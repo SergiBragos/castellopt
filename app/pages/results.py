@@ -74,7 +74,7 @@ def taula_estructura():
                     rx.foreach(
                         AppState.llista_pisos_rang,
                         lambda p: rx.table.row(
-                            rx.table.cell(rx.text(f"Pís {p}", font_weight="bold")),
+                            rx.table.cell(rx.text(f"Pis {p}", font_weight="bold")),
                             rx.foreach(
                                 AppState.llista_rengles_rang,
                                 lambda r: rx.table.cell(

@@ -1,0 +1,34 @@
+/* assets/styles.css */
+
+/* MODE CLAR (Per defecte) */
+:root {
+    --color-text-primary: #111827;
+    --color-text-secondary: #6B7280;
+    --color-background-primary: #FFFFFF;
+    --color-background-secondary: #F9FAFB;
+    --color-background-tertiary: #F3F4F6;
+    --color-border-tertiary: #E5E7EB;
+    --color-border-secondary: #D1D5DB;
+    --color-purple-light: #D4D1FA;
+    --color-accent-transparent: rgba(83, 74, 183, 0.1);
+}
+
+/* MODE FOSC */
+[data-theme='dark'], .dark {
+    --color-text-primary: #F9FAFB;
+    --color-text-secondary: #9CA3AF;
+    --color-background-primary: #1F2937;
+    --color-background-secondary: #111827;
+    --color-background-tertiary: #0F172A;
+    --color-border-tertiary: #374151;
+    --color-border-secondary: #4B5563;
+    --color-purple-light: #2D1B4E;
+    --color-accent-transparent: rgba(167, 139, 250, 0.15);
+}
+
+/* APLICACIÓ GLOBAL */
+body, .rt-Root {
+    background-color: var(--color-background-tertiary) !important;
+    color: var(--color-text-primary);
+    transition: background-color 0.3s ease; /* Opcional: suavitza el canvi de mode */
+}
