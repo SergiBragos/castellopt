@@ -3,7 +3,7 @@ import reflex as rx
 
 # --- COLORS FIXES O CORPORATIUS ---
 
-PURPLE_DARK   = "#3C3489"
+PURPLE_DARK   = "var(--color-purple-dark)"
 PURPLE_MID    = "#534AB7"
 PURPLE_LIGHT  = "var(--color-purple-light)" # La definirem al CSS
 PURPLE_BORDER = "#B5B2D8"

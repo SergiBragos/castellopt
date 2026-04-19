@@ -10,6 +10,7 @@
     --color-border-tertiary: #E5E7EB;
     --color-border-secondary: #D1D5DB;
     --color-purple-light: #D4D1FA;
+    --color-purple-dark: #3C3489;
     --color-accent-transparent: rgba(83, 74, 183, 0.1);
 }
 
@@ -23,6 +24,7 @@
     --color-border-tertiary: #374151;
     --color-border-secondary: #4B5563;
     --color-purple-light: #2D1B4E;
+    --color-purple-dark: #D4D1FA;
     --color-accent-transparent: rgba(167, 139, 250, 0.15);
 }
 
@@ -30,5 +32,5 @@
 body, .rt-Root {
     background-color: var(--color-background-tertiary) !important;
     color: var(--color-text-primary);
-    transition: background-color 0.3s ease; /* Opcional: suavitza el canvi de mode */
+    transition: background-color 0.5s ease; /* Opcional: suavitza el canvi de mode */
 }

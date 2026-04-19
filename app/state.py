@@ -141,7 +141,7 @@ class AppState(rx.State):
         self.login_username = ""
         self.login_password = ""
         return rx.redirect("/")
-
+    
     def set_results_tab(self, tab: str):
         self.results_tab = tab
 
@@ -217,7 +217,7 @@ class AppState(rx.State):
         self.entry_success = ""
 
     def save_settings(self):
-        self.settings_saved = "Preferències actualitzades correctament!"
+        self.settings_saved = "Aquest botó de moment no fa res!"
 
     def toggle_safety(self):
         self.prioritize_safety = not self.prioritize_safety
