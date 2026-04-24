@@ -52,7 +52,14 @@ def upload_page() -> rx.Component:
                         align_items="start",
                         width="100%",
                     ),
-                    
+                    rx.cond(
+                        AppState.entry_success != "",
+                        rx.box(
+                            rx.text(AppState.entry_success, font_size="12px", color=rx.cond(AppState.entry_is_error, "#FFF1F1", "#27500A")),
+                            background_color=rx.cond(AppState.entry_is_error, "#FF5252", "#E8FFCB"),
+                            border_radius="8px", padding="8px 12px", margin_bottom="12px",
+                        ),
+                    ),
                     rx.button(
                         "Processar i carregar dades",
                         on_click=AppState.handle_csv_upload(rx.upload_files(upload_id="csv_upload")),

@@ -235,6 +235,9 @@ class AppState(rx.State):
         self.casteller_id_edicio = None
         self.entry_success = ""
 
+    def clear_entry_success(self):
+        self.entry_success=""
+
     def save_settings(self):
         self.settings_saved = "Aquest botó de moment no fa res!"
 
@@ -320,7 +323,6 @@ class AppState(rx.State):
                     session.commit()
             
             self.entry_success = "Base de dades actualitzada correctament."
-            return rx.redirect("/dashboard")
 
         except Exception as e:
             # Si hi ha qualsevol error greu, el capturem aquí

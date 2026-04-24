@@ -35,8 +35,8 @@ def dades_header():
                 align_items="start",
             ),
             rx.vstack(
-                rx.text("Castellers", font_size="10px", color=styles.TEXT_SECONDARY),
-                rx.text(AppState.dades_castell_actiu.num_castellers.to(str), font_weight="bold"),
+                rx.text("Castellers disponibles", font_size="10px", color=styles.TEXT_SECONDARY),
+                rx.text(AppState.num_castellers.to(str), font_weight="bold"),
                 align_items="start",
             ),
             rx.vstack(
