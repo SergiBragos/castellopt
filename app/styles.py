@@ -127,8 +127,8 @@ badge_success: dict = {
 }
 
 badge_warning: dict = {
-    "background_color": "#FAEEDA",
-    "color": "#633806",
+    "background_color": "#FF4854",
+    "color": "#FFC7C7",
     "font_size": "11px",
     "padding": "2px 8px",
     "border_radius": "8px",
@@ -137,8 +137,8 @@ badge_warning: dict = {
 }
 
 badge_info: dict = {
-    "background_color": PURPLE_LIGHT,
-    "color": "var(--color-purple-primary)",
+    "background_color": "var(--color-purple-dark)",
+    "color": "var(--color-purple-light)",
     "font_size": "11px",
     "padding": "2px 8px",
     "border_radius": "8px",

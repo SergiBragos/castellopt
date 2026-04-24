@@ -3,6 +3,8 @@ import reflex as rx
 import sqlmodel
 import hashlib
 from typing import Optional # Importem per al tipus de la colla
+import pandas as pd
+import io
 
 # ── BDDs ──────────────────────────────────────────────────────────────────────
 
@@ -13,6 +15,7 @@ class User(rx.Model, table=True):
     email: str
 
 class Casteller(rx.Model, table=True):
+    id: Optional[int] = sqlmodel.Field(default=None, primary_key=True)
     name: str
     nickname: str
     colla: int
@@ -84,6 +87,7 @@ class AppState(rx.State):
     casteller_shirt: str = ""
     casteller_notes: str = ""
     entry_success: str = ""
+    upload_processing: bool = False #Variable per saber si estem enmig d'una càrrega de CSV
 
     # --- Setters manuals per evitar DeprecationWarnings ---
     
@@ -94,7 +98,8 @@ class AppState(rx.State):
     def set_casteller_weight(self, value: str): self.casteller_weight = value
     def set_casteller_shirt(self, value: str): self.casteller_shirt = value
     def set_casteller_notes(self, value: str): self.casteller_notes = value
-    
+    def set_upload_processing(self, value: bool): self.upload_processing = value
+
     # Login
     def set_login_username(self, value: str): self.login_username = value
     def set_login_password(self, value: str): self.login_password = value
@@ -250,6 +255,81 @@ class AppState(rx.State):
             self.dades_castell_actiu = session.exec(
                 sqlmodel.select(Castell).where(Castell.nom == val)
             ).first()
+    
+    #Funcions de la càrrega dels castellers en CSV.
+
+    async def handle_csv_upload(self, files: list[rx.UploadFile]):
+        self.upload_processing = True
+        self.entry_success = "Processant..."
+        
+        try:
+            for file in files:
+                upload_data = await file.read()
+                # Useu keep_default_na=False o fillna per evitar els problemes de l'int(NaN)
+                df = pd.read_csv(io.BytesIO(upload_data)).fillna("")
+                df.columns = df.columns.str.strip().str.lower()
+                
+                with rx.session() as session:
+                    for _, row in df.iterrows():
+                        row_id = row.get('id')
+                        existing = None
+                        
+                        # Validem que l'ID sigui realment un número abans de buscar
+                        if row_id != "" and pd.notna(row_id):
+                            try:
+                                search_id = int(float(row_id)) # float primer per si ve com "1.0"
+                                existing = session.exec(
+                                    sqlmodel.select(Casteller).where(Casteller.id == search_id)
+                                ).first()
+                            except ValueError:
+                                continue # Si l'ID no és numèric, ignorem aquesta fila
+
+                        action = str(row.get('action', 'save')).lower().strip()
+                        
+                        if action == 'delete' and existing:
+                            session.delete(existing)
+                        else:
+                            # Funció auxiliar interna per netejar enters i evitar crashes
+                            def to_int(val, default):
+                                try:
+                                    return int(float(val)) if val != "" else default
+                                except:
+                                    return default
+
+                            if existing:
+                                # EDITAR
+                                existing.name = str(row.get('name', existing.name))
+                                existing.nickname = str(row.get('nickname', existing.nickname))
+                                existing.height = to_int(row.get('height'), existing.height)
+                                existing.weight = to_int(row.get('weight'), existing.weight)
+                                existing.talla = str(row.get('talla', existing.talla))
+                                existing.comentaris = str(row.get('comentaris', existing.comentaris))
+                            else:
+                                # CREAR NOU
+                                nou = Casteller(
+                                    name=str(row.get('name', '-')),
+                                    nickname=str(row.get('nickname', '')),
+                                    colla=int(self.colla),
+                                    height=to_int(row.get('height'), 0),
+                                    weight=to_int(row.get('weight'), 0),
+                                    talla=str(row.get('talla', '')),
+                                    comentaris=str(row.get('comentaris', ''))
+                                )
+                                session.add(nou)
+                    
+                    session.commit()
+            
+            self.entry_success = "Base de dades actualitzada correctament."
+            return rx.redirect("/dashboard")
+
+        except Exception as e:
+            # Si hi ha qualsevol error greu, el capturem aquí
+            print(f"ERROR CRÍTIC CÀRREGA: {e}")
+            self.entry_success = f"error: Error en el processament: {str(e)}"
+        
+        finally:
+            # Això s'executa SEMPRE, encara que el codi hagi petat
+            self.upload_processing = False
 
     @rx.var
     def user_initials(self) -> str:

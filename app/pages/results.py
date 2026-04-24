@@ -191,7 +191,7 @@ def results_page() -> rx.Component:
                             ],
                             spacing="2", align_items="center", width="100%",
                         ),
-                        rx.center(rx.box(rx.text("Score: 94 / 100", **styles.badge_success), margin_top="16px")),
+                        rx.center(rx.box(rx.text("Castell optimitzat correctament", **styles.badge_success), margin_top="16px")),
                         style=styles.card_style, width="100%",
                     ),
                     width="100%", spacing="4",
@@ -202,6 +202,7 @@ def results_page() -> rx.Component:
                     rx.table.root(
                         rx.table.header(
                             rx.table.row(
+                                rx.table.column_header_cell(rx.text("id", font_size="12px", color=styles.TEXT_SECONDARY)),
                                 rx.table.column_header_cell(rx.text("Nom", font_size="12px", color=styles.TEXT_SECONDARY)),
                                 rx.table.column_header_cell(rx.text("Sobrenom", font_size="12px", color=styles.TEXT_SECONDARY)),
                                 rx.table.column_header_cell(rx.text("Alçada", font_size="12px", color=styles.TEXT_SECONDARY)),
@@ -214,12 +215,13 @@ def results_page() -> rx.Component:
                             rx.foreach(
                                 AppState.castellers_colla,
                                 lambda casteller: rx.table.row(
+                                    rx.table.cell(rx.text(casteller.id, font_size="12px")),
                                     rx.table.cell(rx.text(casteller.name, font_size="12px")),
                                     rx.table.cell(
                                         rx.box(
-                                            rx.text(casteller.nickname, font_size="12px", color=styles.TEXT_SECONDARY),
-                                            background_color=styles.PURPLE_LIGHT,
-                                            color=styles.PURPLE_DARK,
+                                            rx.text(casteller.nickname, font_size="12px", color=styles.PURPLE_LIGHT),
+                                            background_color=styles.PURPLE_DARK,
+                                            color=styles.PURPLE_LIGHT,
                                             text_align="center",
                                             font_weight="bold",
                                             padding="2px 2px",
