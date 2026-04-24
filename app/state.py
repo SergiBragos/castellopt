@@ -66,7 +66,7 @@ def hash_password(password: str) -> str:
 # ── App State ─────────────────────────────────────────────────────────────────
 
 class AppState(rx.State):
-    state_auto_setters: bool = True
+
     username: str = ""
     is_logged_in: bool = False
     colla: int | None = None  # Usem el pipe | per permetre el None inicial
@@ -85,13 +85,27 @@ class AppState(rx.State):
     casteller_notes: str = ""
     entry_success: str = ""
 
-    # Setters manuals (Necessaris per evitar DeprecationWarnings)
-    def set_name(self, value: str): self.casteller_name = value
-    def set_nickname(self, value: str): self.casteller_nickname = value
-    def set_height(self, value: str): self.casteller_height = value
-    def set_weight(self, value: str): self.casteller_weight = value
-    def set_shirt(self, value: str): self.casteller_shirt = value # Afegit
-    def set_notes(self, value: str): self.casteller_notes = value # Afegit
+    # --- Setters manuals per evitar DeprecationWarnings ---
+    
+    # Formularis de Castellers
+    def set_casteller_name(self, value: str): self.casteller_name = value
+    def set_casteller_nickname(self, value: str): self.casteller_nickname = value
+    def set_casteller_height(self, value: str): self.casteller_height = value
+    def set_casteller_weight(self, value: str): self.casteller_weight = value
+    def set_casteller_shirt(self, value: str): self.casteller_shirt = value
+    def set_casteller_notes(self, value: str): self.casteller_notes = value
+    
+    # Login
+    def set_login_username(self, value: str): self.login_username = value
+    def set_login_password(self, value: str): self.login_password = value
+    def set_login_error(self, value: str): self.login_error = value
+
+    # Settings i Preferències
+    def set_display_name(self, value: str): self.display_name = value
+    def set_email(self, value: str): self.email = value
+    def set_selected_castell(self, value: str): self.selected_castell = value
+    def set_iteracions_triades(self, value: str): self.iteracions_triades = value
+    def set_results_tab(self, value: str): self.results_tab = value
 
     prioritize_safety: bool = True
     allow_swaps: bool = True
