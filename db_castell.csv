@@ -1,0 +1,3 @@
+id,nom,pisos,posicions,max_rengles,max_reserves,num_castellers,equacions,tipus_tronc,max_iters,min_iters,rengles_pes,x_folre,x_manilles,x_pinya,x_tronc,y_folre,y_manilles,y_pinya,y_tronc,dist_cordo,angle_inioffset,long_tit,rang_mapa_r1,offset_mapa_r1,offset_titol_r1,rang_mapa_r2,offset_mapa_r2,offset_titol_r2,rang_mapa_r3,offset_mapa_r3,offset_titol_r3,grafic_vmax,grafic_nivvert,grafic_nivhor,cordo_cm
+0,4d8,8,32,4,3,32,100,CIRCULAR,10000,1000,,,,,,,,,,,,,,,,,,,,,,,,,
+1,3d8,8,24,3,3,24,100,CIRCULAR,10000,1000,,,,,,,,,,,,,,,,,,,,,,,,,
